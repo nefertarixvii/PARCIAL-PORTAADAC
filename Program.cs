@@ -4,9 +4,8 @@ using PARCIAL_PROGRA.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 🔹 Connection String
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
-    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+// 🔹 Connection String (CORREGIDO para Render)
+var connectionString = "Data Source=app.db";
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(connectionString));
@@ -26,20 +25,8 @@ builder.Services.AddAuthorization();
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
-// 🔹 Redis / Cache
-var redisConnection = builder.Configuration.GetConnectionString("Redis");
-
-if (!string.IsNullOrEmpty(redisConnection))
-{
-    builder.Services.AddStackExchangeRedisCache(options =>
-    {
-        options.Configuration = redisConnection;
-    });
-}
-else
-{
-    builder.Services.AddDistributedMemoryCache();
-}
+// 🔹 Cache (SIN Redis)
+builder.Services.AddDistributedMemoryCache();
 
 // 🔹 Session
 builder.Services.AddSession(options =>
@@ -67,7 +54,7 @@ app.UseRouting();
 
 app.UseSession();
 
-// 🔥 IMPORTANTE (faltaba esto)
+// 🔥 IMPORTANTE
 app.UseAuthentication();
 app.UseAuthorization();
 
