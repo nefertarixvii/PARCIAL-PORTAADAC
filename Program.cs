@@ -77,4 +77,8 @@ using (var scope = app.Services.CreateScope())
     await DbSeeder.SeedAsync(context, userManager);
 }
 
+builder.Services.AddSession();
+
+app.UseSession();
+
 app.Run();
