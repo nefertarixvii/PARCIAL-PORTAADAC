@@ -9,14 +9,15 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
-builder.Services.AddDefaultIdentity<IdentityUser>(options => {
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+{
     options.SignIn.RequireConfirmedAccount = false;
 })
-    .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddRoles<IdentityRole>();
-builder.Services.AddControllersWithViews();
-
+.AddEntityFrameworkStores<ApplicationDbContext>()
+.AddDefaultTokenProviders();
+builder.Services.AddAuthorization();
+builder.Services.AddControllersWithViews(); //  ESTA ES LA QUE FALTA
+builder.Services.AddRazorPages();           //  también necesaria para Identity
 // Configuración de Sesión y Redis
 var redisConnection = builder.Configuration.GetConnectionString("Redis");
 if (!string.IsNullOrEmpty(redisConnection))
@@ -70,15 +71,24 @@ app.MapRazorPages()
 // Seed de datos inicial
 using (var scope = app.Services.CreateScope())
 {
-    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
-    
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<ApplicationDbContext>();
+    var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
+    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
     context.Database.EnsureCreated();
+
+    // 🔥 Crear rol si no existe
+    if (!await roleManager.RoleExistsAsync("COORDINADOR"))
+    {
+        await roleManager.CreateAsync(new IdentityRole("COORDINADOR"));
+    }
+
     await DbSeeder.SeedAsync(context, userManager);
 }
 
-builder.Services.AddSession();
 
-app.UseSession();
+
+
 
 app.Run();

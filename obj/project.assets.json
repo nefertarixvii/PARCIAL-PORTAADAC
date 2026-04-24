@@ -3688,11 +3688,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ar\\Documents\\PARCIAL PROGRA\\PARCIAL PROGRA.csproj",
+      "projectUniqueName": "C:\\Users\\ar\\Documents\\PARCIALPROGRA\\PARCIAL PROGRA.csproj",
       "projectName": "PARCIAL PROGRA",
-      "projectPath": "C:\\Users\\ar\\Documents\\PARCIAL PROGRA\\PARCIAL PROGRA.csproj",
+      "projectPath": "C:\\Users\\ar\\Documents\\PARCIALPROGRA\\PARCIAL PROGRA.csproj",
       "packagesPath": "C:\\Users\\ar\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ar\\Documents\\PARCIAL PROGRA\\obj\\",
+      "outputPath": "C:\\Users\\ar\\Documents\\PARCIALPROGRA\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\ar\\AppData\\Roaming\\NuGet\\NuGet.Config"
