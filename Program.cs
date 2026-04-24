@@ -4,22 +4,31 @@ using PARCIAL_PROGRA.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+// 🔹 Connection String
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
+    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(connectionString));
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+// 🔹 Identity con roles
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 {
     options.SignIn.RequireConfirmedAccount = false;
 })
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
+
+// 🔹 Servicios necesarios
 builder.Services.AddAuthorization();
-builder.Services.AddControllersWithViews(); //  ESTA ES LA QUE FALTA
-builder.Services.AddRazorPages();           //  también necesaria para Identity
-// Configuración de Sesión y Redis
+builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
+
+// 🔹 Redis / Cache
 var redisConnection = builder.Configuration.GetConnectionString("Redis");
+
 if (!string.IsNullOrEmpty(redisConnection))
 {
     builder.Services.AddStackExchangeRedisCache(options =>
@@ -32,6 +41,7 @@ else
     builder.Services.AddDistributedMemoryCache();
 }
 
+// 🔹 Session
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(30);
@@ -41,7 +51,7 @@ builder.Services.AddSession(options =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// 🔹 Pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
@@ -49,44 +59,50 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 app.UseRouting();
+
 app.UseSession();
+
+// 🔥 IMPORTANTE (faltaba esto)
+app.UseAuthentication();
 app.UseAuthorization();
 
-
-
+// 🔹 Rutas
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapRazorPages();
 
-// Seed de datos inicial
-using (var scope = app.Services.CreateScope())
+// 🔹 SEED SEGURO
+try
 {
-    var services = scope.ServiceProvider;
-    var context = services.GetRequiredService<ApplicationDbContext>();
-    var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
-    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-
-    context.Database.EnsureCreated();
-
-    // 🔥 Crear rol si no existe
-    if (!await roleManager.RoleExistsAsync("COORDINADOR"))
+    using (var scope = app.Services.CreateScope())
     {
-        await roleManager.CreateAsync(new IdentityRole("COORDINADOR"));
+        var services = scope.ServiceProvider;
+
+        var context = services.GetRequiredService<ApplicationDbContext>();
+        var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
+        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+        context.Database.EnsureCreated();
+
+        // 🔥 Crear rol si no existe
+        if (!await roleManager.RoleExistsAsync("Coordinador"))
+        {
+            await roleManager.CreateAsync(new IdentityRole("Coordinador"));
+        }
+
+        await DbSeeder.SeedAsync(context, userManager);
     }
-
-    await DbSeeder.SeedAsync(context, userManager);
 }
-
-
-
-
+catch (Exception ex)
+{
+    Console.WriteLine("ERROR EN SEED: " + ex.Message);
+}
 
 app.Run();
