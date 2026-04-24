@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PARCIAL PROGRA")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f163d47094f384991a875ecd57f71919fd14f6e6")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+905b8dab75fedceafd2f7403adb1872886423e02")]
 [assembly: System.Reflection.AssemblyProductAttribute("PARCIAL PROGRA")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PARCIAL PROGRA")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

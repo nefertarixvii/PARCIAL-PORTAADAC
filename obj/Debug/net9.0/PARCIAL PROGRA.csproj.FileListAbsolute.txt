@@ -291,3 +291,6 @@ C:\Users\ar\Documents\PARCIAL PROGRA\obj\Debug\net9.0\refint\PARCIAL PROGRA.dll
 C:\Users\ar\Documents\PARCIAL PROGRA\obj\Debug\net9.0\PARCIAL PROGRA.pdb
 C:\Users\ar\Documents\PARCIAL PROGRA\obj\Debug\net9.0\PARCIAL PROGRA.genruntimeconfig.cache
 C:\Users\ar\Documents\PARCIAL PROGRA\obj\Debug\net9.0\ref\PARCIAL PROGRA.dll
+C:\Users\ar\Documents\PARCIAL PROGRA\bin\Debug\net9.0\Microsoft.Extensions.Caching.StackExchangeRedis.dll
+C:\Users\ar\Documents\PARCIAL PROGRA\bin\Debug\net9.0\Pipelines.Sockets.Unofficial.dll
+C:\Users\ar\Documents\PARCIAL PROGRA\bin\Debug\net9.0\StackExchange.Redis.dll

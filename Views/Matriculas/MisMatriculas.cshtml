@@ -1,0 +1,56 @@
+@model IEnumerable<PARCIAL_PROGRA.Models.Matricula>
+
+@{
+    ViewData["Title"] = "Mis Matrículas";
+}
+
+<h1>Mis Matrículas</h1>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Curso</th>
+            <th>Código</th>
+            <th>Fecha de Registro</th>
+            <th>Estado</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (!Model.Any())
+        {
+            <tr>
+                <td colspan="4" class="text-center">No tienes matrículas</td>
+            </tr>
+        }
+        else
+        {
+            @foreach (var matricula in Model)
+            {
+                <tr>
+                    <td>@matricula.Curso?.Nombre</td>
+                    <td>@matricula.Curso?.Codigo</td>
+                    <td>@matricula.FechaRegistro.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>
+                        <span class="badge bg-@(
+                            matricula.Estado == PARCIAL_PROGRA.Models.EstadoMatricula.Confirmada ? "success" :
+                            matricula.Estado == PARCIAL_PROGRA.Models.EstadoMatricula.Pendiente ? "warning" : "danger"
+                        )">
+                            @matricula.Estado
+                        </span>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<a asp-controller="Cursos" asp-action="Catalogo" class="btn btn-primary">Ver Catálogo de Cursos</a>

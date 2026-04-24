@@ -1,0 +1,69 @@
+@model IEnumerable<PARCIAL_PROGRA.Models.Matricula>
+
+@{
+    var curso = ViewData["Curso"] as PARCIAL_PROGRA.Models.Curso;
+    ViewData["Title"] = $"Matrículas - {curso?.Nombre}";
+}
+
+<h1>Matrículas del Curso: @curso?.Nombre</h1>
+<p>Código: @curso?.Codigo | Cupo: @curso?.CupoMaximo</p>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Usuario</th>
+            <th>Email</th>
+            <th>Fecha de Registro</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (!Model.Any())
+        {
+            <tr>
+                <td colspan="5" class="text-center">No hay matrículas para este curso</td>
+            </tr>
+        }
+        else
+        {
+            @foreach (var matricula in Model)
+            {
+                <tr>
+                    <td>@matricula.Usuario?.UserName</td>
+                    <td>@matricula.Usuario?.Email</td>
+                    <td>@matricula.FechaRegistro.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>
+                        <span class="badge bg-@(
+                            matricula.Estado == PARCIAL_PROGRA.Models.EstadoMatricula.Confirmada ? "success" :
+                            matricula.Estado == PARCIAL_PROGRA.Models.EstadoMatricula.Pendiente ? "warning" : "danger"
+                        )">
+                            @matricula.Estado
+                        </span>
+                    </td>
+                    <td>
+                        @if (matricula.Estado == PARCIAL_PROGRA.Models.EstadoMatricula.Pendiente)
+                        {
+                            <a asp-action="Confirmar" asp-route-id="@matricula.Id" class="btn btn-sm btn-success">Confirmar</a>
+                        }
+                        @if (matricula.Estado != PARCIAL_PROGRA.Models.EstadoMatricula.Cancelada)
+                        {
+                            <a asp-action="Cancelar" asp-route-id="@matricula.Id" class="btn btn-sm btn-danger" onclick="return confirm('¿Está seguro de cancelar esta matrícula?')">Cancelar</a>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<a asp-action="Index" class="btn btn-secondary">Volver al Panel</a>
