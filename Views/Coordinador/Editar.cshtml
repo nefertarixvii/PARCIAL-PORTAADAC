@@ -1,0 +1,76 @@
+@model PARCIAL_PROGRA.Models.Curso
+
+@{
+    ViewData["Title"] = "Editar Curso";
+}
+
+<h1>Editar Curso</h1>
+
+<form asp-action="Editar" method="post">
+    <input type="hidden" asp-for="Id" />
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label class="form-label">Código</label>
+                <input asp-for="Codigo" class="form-control" required />
+                <span asp-validation-for="Codigo" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label class="form-label">Nombre</label>
+                <input asp-for="Nombre" class="form-control" required />
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="mb-3">
+                <label class="form-label">Créditos</label>
+                <input asp-for="Creditos" class="form-control" type="number" min="1" required />
+                <span asp-validation-for="Creditos" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="mb-3">
+                <label class="form-label">Cupo Máximo</label>
+                <input asp-for="CupoMaximo" class="form-control" type="number" min="1" required />
+                <span asp-validation-for="CupoMaximo" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="mb-3">
+                <label class="form-label">Activo</label>
+                <div class="form-check">
+                    <input asp-for="Activo" class="form-check-input" />
+                    <label class="form-check-label">Curso activo</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label class="form-label">Horario Inicio (HH:mm)</label>
+                <input asp-for="HorarioInicio" class="form-control" type="time" required />
+                <span asp-validation-for="HorarioInicio" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label class="form-label">Horario Fin (HH:mm)</label>
+                <input asp-for="HorarioFin" class="form-control" type="time" required />
+                <span asp-validation-for="HorarioFin" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    </div>
+</form>
