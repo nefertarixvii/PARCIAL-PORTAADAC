@@ -1,0 +1,47 @@
+@model PARCIAL_PROGRA.Models.Curso
+
+@{
+    ViewData["Title"] = "Detalle del Curso";
+}
+
+<h1>Detalle del Curso</h1>
+
+<div class="card">
+    <div class="card-header">
+        <h5>@Model.Nombre</h5>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Código</dt>
+            <dd class="col-sm-9">@Model.Codigo</dd>
+
+            <dt class="col-sm-3">Nombre</dt>
+            <dd class="col-sm-9">@Model.Nombre</dd>
+
+            <dt class="col-sm-3">Créditos</dt>
+            <dd class="col-sm-9">@Model.Creditos</dd>
+
+            <dt class="col-sm-3">Cupo Máximo</dt>
+            <dd class="col-sm-9">@Model.CupoMaximo</dd>
+
+            <dt class="col-sm-3">Horario</dt>
+            <dd class="col-sm-9">@Model.HorarioInicio.ToString(@"hh\:mm") - @Model.HorarioFin.ToString(@"hh\:mm")</dd>
+
+            <dt class="col-sm-3">Estado</dt>
+            <dd class="col-sm-9">@(Model.Activo ? "Activo" : "Inactivo")</dd>
+        </dl>
+    </div>
+    <div class="card-footer">
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            <form asp-controller="Matriculas" asp-action="Inscribirse" asp-route-cursoId="@Model.Id" method="post">
+                <button type="submit" class="btn btn-success">Inscribirse</button>
+            </form>
+        }
+        else
+        {
+            <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary">Iniciar sesión para inscribirse</a>
+        }
+        <a asp-action="Catalogo" class="btn btn-secondary">Volver al Catálogo</a>
+    </div>
+</div>

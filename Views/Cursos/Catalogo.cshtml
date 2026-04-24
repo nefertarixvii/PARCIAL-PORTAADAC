@@ -1,0 +1,78 @@
+@model IEnumerable<PARCIAL_PROGRA.Models.Curso>
+
+@{
+    ViewData["Title"] = "Catálogo de Cursos";
+}
+
+<h1>Catálogo de Cursos</h1>
+
+<!-- Filtros -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form asp-action="Catalogo" method="get" class="row g-3">
+            <div class="col-md-3">
+                <label class="form-label">Nombre</label>
+                <input type="text" name="nombre" class="form-control" value="@ViewData["Nombre"]" />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Créditos Mín</label>
+                <input type="number" name="creditosMin" class="form-control" value="@ViewData["CreditosMin"]" min="0" />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Créditos Máx</label>
+                <input type="number" name="creditosMax" class="form-control" value="@ViewData["CreditosMax"]" min="0" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Horario</label>
+                <select name="horario" class="form-select">
+                    <option value="">Todos</option>
+                    <option value="manana" selected="@(ViewData["Horario"]?.ToString() == "manana")">Mañana</option>
+                    <option value="tarde" selected="@(ViewData["Horario"]?.ToString() == "tarde")">Tarde</option>
+                    <option value="noche" selected="@(ViewData["Horario"]?.ToString() == "noche")">Noche</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">&nbsp;</label>
+                <button type="submit" class="btn btn-primary w-100">Filtrar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Listado de cursos -->
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Código</th>
+            <th>Nombre</th>
+            <th>Créditos</th>
+            <th>Cupo</th>
+            <th>Horario</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (!Model.Any())
+        {
+            <tr>
+                <td colspan="6" class="text-center">No se encontraron cursos</td>
+            </tr>
+        }
+        else
+        {
+            @foreach (var curso in Model)
+            {
+                <tr>
+                    <td>@curso.Codigo</td>
+                    <td>@curso.Nombre</td>
+                    <td>@curso.Creditos</td>
+                    <td>@curso.CupoMaximo</td>
+                    <td>@curso.HorarioInicio.ToString(@"hh\:mm") - @curso.HorarioFin.ToString(@"hh\:mm")</td>
+                    <td>
+                        <a asp-action="Detalle" asp-route-id="@curso.Id" class="btn btn-sm btn-info">Ver Detalle</a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
